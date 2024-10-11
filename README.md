@@ -1,58 +1,135 @@
-# create-svelte
+# Tailwind Color Picker for Svelte
 
-Everything you need to build a Svelte library, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+A simple, customizable color picker component for Svelte that uses Tailwind CSS color palettes.
 
-Read more about creating a library [in the docs](https://kit.svelte.dev/docs/packaging).
+![Tailwind Color Picker for Svelte](static/banner.webp)
 
-## Creating a project
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Features
+
+- HTML Canvas for optimal performance
+- Flexible color options: Use Tailwind default colors or your own
+- Lightweight with no dependencies
+- Customizable appearance (size, margins, borders, rounded corners)
+- Vertical or horizontal orientation
+- Ability to limit color and shade choices
+
+
+
+![Tailwind Color Picker for Svelte](static/features.webp)
+
+
+## Installation
 
 ```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
+npm install svelte-tailwind-color-picker
 ```
 
-## Developing
+## Usage
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+1. Import the component in your Svelte file:
 
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+```svelte
+import TailwindColorPicker from 'svelte-tailwind-color-picker';
 ```
 
-Everything inside `src/lib` is part of your library, everything inside `src/routes` can be used as a showcase or preview app.
+2. Use the component in your Svelte template:
+
+```svelte
+<TailwindColorPicker bind:activeSwatch />
+```
+
+3. Access the selected color:
+
+```svelte
+{#if activeSwatch}
+  <p>Selected color: {activeSwatch.color}-{activeSwatch.shade} ({activeSwatch.swatch.hex})</p>
+{/if}
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| swatchSize | number | 35 | Size of each color swatch |
+| swatchMargin | number | 0 | Margin between swatches |
+| borderColor | string | '#000000' | Border color of swatches |
+| borderThickness | number | 4 | Border thickness of swatches |
+| roundedCorners | boolean | false | Enable rounded corners |
+| cornerRadius | number | 0 | Radius of rounded corners |
+| orientation | 'horizontal' \| 'vertical' | 'horizontal' | Orientation of the color picker |
+| includeColors | string[] | all colors | Array of color names to include |
+| includeShades | string[] | all shades | Array of shade values to include |
+
+## Examples
+
+### Basic Usage
+
+```svelte
+<TailwindColorPicker bind:activeSwatch />
+```
+
+### Customized Appearance
+
+```svelte
+<TailwindColorPicker
+  swatchSize={40}
+  swatchMargin={2}
+  borderColor="#cccccc"
+  borderThickness={2}
+  roundedCorners={true}
+  cornerRadius={8}
+  orientation="vertical"
+  includeColors={['red', 'blue', 'green']}
+  includeShades={['400', '500', '600']}
+  bind:activeSwatch
+/>
+```
+
+### Handling Color Selection
+
+```svelte
+<script>
+  import TailwindColorPicker from 'svelte-tailwind-color-picker';
+  import type { ActiveSwatch } from 'svelte-tailwind-color-picker';
+
+  let activeSwatch: ActiveSwatch | null = null;
+
+  function handleColorChange() {
+    if (activeSwatch) {
+      console.log(`Selected color: ${activeSwatch.color}-${activeSwatch.shade}`);
+      console.log(`Hex value: ${activeSwatch.swatch.hex}`);
+    }
+  }
+</script>
+
+<TailwindColorPicker bind:activeSwatch on:change={handleColorChange} />
+```
+
+## Development
+
+To set up the project for development:
+
+1. Clone the repository
+2. Install dependencies with `npm install`
+3. Start the development server with `npm run dev`
 
 ## Building
 
-To build your library:
+To build the library:
 
 ```bash
 npm run package
 ```
 
-To create a production version of your showcase app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
-
 ## Publishing
 
-Go into the `package.json` and give your package the desired name through the `"name"` option. Also consider adding a `"license"` field and point it to a `LICENSE` file which you can create from a template (one popular option is the [MIT license](https://opensource.org/license/mit/)).
+To publish the library to npm:
 
-To publish your library to [npm](https://www.npmjs.com):
+1. Update the version in `package.json`
+2. Build the package
+3. Run `npm publish`
 
-```bash
-npm publish
-```
+## License
+
+MIT License
