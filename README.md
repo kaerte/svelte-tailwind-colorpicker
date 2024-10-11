@@ -4,7 +4,6 @@ A simple, customizable color picker component for Svelte that uses Tailwind CSS 
 
 ![Tailwind Color Picker for Svelte](static/banner.webp)
 
-
 ## Features
 
 - HTML Canvas for optimal performance
@@ -14,10 +13,7 @@ A simple, customizable color picker component for Svelte that uses Tailwind CSS 
 - Vertical or horizontal orientation
 - Ability to limit color and shade choices
 
-
-
 ![Tailwind Color Picker for Svelte](static/features.webp)
-
 
 ## Installation
 
@@ -43,23 +39,23 @@ import TailwindColorPicker from 'svelte-tailwind-color-picker';
 
 ```svelte
 {#if activeSwatch}
-  <p>Selected color: {activeSwatch.color}-{activeSwatch.shade} ({activeSwatch.swatch.hex})</p>
+	<p>Selected color: {activeSwatch.color}-{activeSwatch.shade} ({activeSwatch.swatch.hex})</p>
 {/if}
 ```
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| swatchSize | number | 35 | Size of each color swatch |
-| swatchMargin | number | 0 | Margin between swatches |
-| borderColor | string | '#000000' | Border color of swatches |
-| borderThickness | number | 4 | Border thickness of swatches |
-| roundedCorners | boolean | false | Enable rounded corners |
-| cornerRadius | number | 0 | Radius of rounded corners |
-| orientation | 'horizontal' \| 'vertical' | 'horizontal' | Orientation of the color picker |
-| includeColors | string[] | all colors | Array of color names to include |
-| includeShades | string[] | all shades | Array of shade values to include |
+| Prop            | Type                       | Default      | Description                      |
+| --------------- | -------------------------- | ------------ | -------------------------------- |
+| swatchSize      | number                     | 35           | Size of each color swatch        |
+| swatchMargin    | number                     | 0            | Margin between swatches          |
+| borderColor     | string                     | '#000000'    | Border color of swatches         |
+| borderThickness | number                     | 4            | Border thickness of swatches     |
+| roundedCorners  | boolean                    | false        | Enable rounded corners           |
+| cornerRadius    | number                     | 0            | Radius of rounded corners        |
+| orientation     | 'horizontal' \| 'vertical' | 'horizontal' | Orientation of the color picker  |
+| includeColors   | string[]                   | all colors   | Array of color names to include  |
+| includeShades   | string[]                   | all shades   | Array of shade values to include |
 
 ## Examples
 
@@ -73,16 +69,16 @@ import TailwindColorPicker from 'svelte-tailwind-color-picker';
 
 ```svelte
 <TailwindColorPicker
-  swatchSize={40}
-  swatchMargin={2}
-  borderColor="#cccccc"
-  borderThickness={2}
-  roundedCorners={true}
-  cornerRadius={8}
-  orientation="vertical"
-  includeColors={['red', 'blue', 'green']}
-  includeShades={['400', '500', '600']}
-  bind:activeSwatch
+	swatchSize={40}
+	swatchMargin={2}
+	borderColor="#cccccc"
+	borderThickness={2}
+	roundedCorners={true}
+	cornerRadius={8}
+	orientation="vertical"
+	includeColors={['red', 'blue', 'green']}
+	includeShades={['400', '500', '600']}
+	bind:activeSwatch
 />
 ```
 
@@ -90,17 +86,17 @@ import TailwindColorPicker from 'svelte-tailwind-color-picker';
 
 ```svelte
 <script>
-  import TailwindColorPicker from 'svelte-tailwind-color-picker';
-  import type { ActiveSwatch } from 'svelte-tailwind-color-picker';
+	import TailwindColorPicker from 'svelte-tailwind-color-picker';
+	import type { ActiveSwatch } from 'svelte-tailwind-color-picker';
 
-  let activeSwatch: ActiveSwatch | null = null;
+	let activeSwatch: ActiveSwatch | null = null;
 
-  function handleColorChange() {
-    if (activeSwatch) {
-      console.log(`Selected color: ${activeSwatch.color}-${activeSwatch.shade}`);
-      console.log(`Hex value: ${activeSwatch.swatch.hex}`);
-    }
-  }
+	function handleColorChange() {
+		if (activeSwatch) {
+			console.log(`Selected color: ${activeSwatch.color}-${activeSwatch.shade}`);
+			console.log(`Hex value: ${activeSwatch.swatch.hex}`);
+		}
+	}
 </script>
 
 <TailwindColorPicker bind:activeSwatch on:change={handleColorChange} />
