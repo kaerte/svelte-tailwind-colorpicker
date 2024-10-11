@@ -2,9 +2,6 @@
 	import '../app.css';
 </script>
 
-<nav class="bg-white-800 p-4">
-	<a href="/">Home</a>
-</nav>
-<div class="container mx-auto">
+<div class="container mx-auto pt-8">
 	<slot></slot>
 </div>

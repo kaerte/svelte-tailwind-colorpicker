@@ -2,6 +2,8 @@
 
 A simple, customizable color picker component for Svelte that uses Tailwind CSS color palettes.
 
+[Live Demo](https://svelte-tailwind-colorpicker.pages.dev/)
+
 ![Tailwind Color Picker for Svelte](static/banner.webp)
 
 ## Features
