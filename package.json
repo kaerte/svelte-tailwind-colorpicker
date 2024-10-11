@@ -2,6 +2,16 @@
 	"name": "svelte-tailwind-colorpicker",
 	"version": "0.0.1",
 	"license": "MIT",
+	"description": "A simple, customizable color picker component for Svelte that uses Tailwind CSS color palettes.",
+	"keywords": [
+		"svelte",
+		"tailwind",
+		"color picker"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/kaerte/svelte-tailwind-colorpicker"
+	},
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build && npm run package",
