@@ -13,11 +13,12 @@
   let className: string = '';
   export { className as class };
 
+  export let orientation: 'horizontal' | 'vertical' = 'horizontal';
+
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D;
   let baseGridCanvas: HTMLCanvasElement;
   let baseGridCtx: CanvasRenderingContext2D;
-  let hoveredSwatch: ActiveSwatch | null = null; // This can be removed if not used elsewhere
   let isMouseDown = false;
   let isDragging = false;
 
@@ -41,8 +42,8 @@
     return allColors;
   }
 
-  $: canvasWidth = calculateCanvasWidth(filteredColors);
-  $: canvasHeight = calculateCanvasHeight(filteredColors);
+  $: canvasWidth = orientation === 'horizontal' ? calculateCanvasWidth(filteredColors) : calculateCanvasHeight(filteredColors);
+  $: canvasHeight = orientation === 'vertical' ? calculateCanvasWidth(filteredColors) : calculateCanvasHeight(filteredColors);
 
   function calculateCanvasWidth(colors: ColorGroup[]): number {
     if (!colors || colors.length === 0) return 0;
@@ -75,22 +76,32 @@
     baseGridCtx.clearRect(0, 0, canvasWidth, canvasHeight);
     swatchPositions.clear();
 
-    filteredColors.forEach((color, columnIndex) => {
-      let x = swatchMargin + columnIndex * (swatchSize + swatchMargin);
-      let y = swatchMargin;
+    filteredColors.forEach((color: ColorGroup, columnIndex: number) => {
+      let x: number, y: number;
+      if (orientation === 'horizontal') {
+        x = swatchMargin + columnIndex * (swatchSize + swatchMargin);
+        y = swatchMargin;
+      } else {
+        x = swatchMargin;
+        y = swatchMargin + columnIndex * (swatchSize + swatchMargin);
+      }
 
       const shadePositions: Map<string, { x: number; y: number }> = new Map();
 
-      Object.entries(color.swatches).forEach(([shade, swatch]) => {
+      Object.entries(color.swatches).forEach(([shade, swatch]: [string, { hex: string }]) => {
         baseGridCtx.fillStyle = swatch.hex;
         baseGridCtx.globalAlpha = 1;
 
-        const radius = roundedCorners ? (cornerRadius / 100) * (swatchSize / 2) : 0;
+        const radius: number = roundedCorners ? (cornerRadius / 100) * (swatchSize / 2) : 0;
         drawRoundedRect(baseGridCtx, x, y, swatchSize, swatchSize, radius);
 
         shadePositions.set(shade, { x, y });
 
-        y += swatchSize + swatchMargin;
+        if (orientation === 'horizontal') {
+          y += swatchSize + swatchMargin;
+        } else {
+          x += swatchSize + swatchMargin;
+        }
       });
 
       swatchPositions.set(color.name, shadePositions);
@@ -107,10 +118,6 @@
     if (activeSwatch) {
       drawSwatchBorder(activeSwatch, borderColor, borderThickness);
     }
-    // Remove the following lines:
-    // if (hoveredSwatch && !isMouseDown) {
-    //   drawSwatchBorder(hoveredSwatch, 'rgba(0,0,0,0.5)', 1);
-    // }
   }
 
   function drawSwatchBorder(
@@ -175,8 +182,14 @@
   }
 
   function getClickedSwatch(x: number, y: number): ActiveSwatch | null {
-    const columnIndex = Math.floor((x - swatchMargin) / (swatchSize + swatchMargin));
-    const rowIndex = Math.floor((y - swatchMargin) / (swatchSize + swatchMargin));
+    let columnIndex, rowIndex;
+    if (orientation === 'horizontal') {
+      columnIndex = Math.floor((x - swatchMargin) / (swatchSize + swatchMargin));
+      rowIndex = Math.floor((y - swatchMargin) / (swatchSize + swatchMargin));
+    } else {
+      columnIndex = Math.floor((y - swatchMargin) / (swatchSize + swatchMargin));
+      rowIndex = Math.floor((x - swatchMargin) / (swatchSize + swatchMargin));
+    }
 
     if (columnIndex >= 0 && columnIndex < filteredColors.length) {
       const color = filteredColors[columnIndex];
@@ -214,12 +227,7 @@
   function handleMouseUp(event: MouseEvent): void {
     isMouseDown = false;
     isDragging = false;
-    // Ensure we update the swatch on mouse up, even if outside the canvas
     handleMouseInteraction(event);
-  }
-
-  function updateHoveredSwatch(event: MouseEvent): void {
-    // This function can be removed or left empty if not used elsewhere
   }
 
   export function updateAndRedraw(newSettings: {
@@ -229,6 +237,7 @@
     borderThickness?: number;
     roundedCorners?: boolean;
     cornerRadius?: number;
+    orientation?: 'horizontal' | 'vertical';
   }): void {
     swatchSize = newSettings.swatchSize ?? swatchSize;
     swatchMargin = newSettings.swatchMargin ?? swatchMargin;
@@ -236,9 +245,10 @@
     borderThickness = newSettings.borderThickness ?? borderThickness;
     roundedCorners = newSettings.roundedCorners ?? roundedCorners;
     cornerRadius = newSettings.cornerRadius ?? cornerRadius;
+    orientation = newSettings.orientation ?? orientation;
 
-    canvasWidth = calculateCanvasWidth(filteredColors);
-    canvasHeight = calculateCanvasHeight(filteredColors);
+    canvasWidth = orientation === 'horizontal' ? calculateCanvasWidth(filteredColors) : calculateCanvasHeight(filteredColors);
+    canvasHeight = orientation === 'vertical' ? calculateCanvasWidth(filteredColors) : calculateCanvasHeight(filteredColors);
 
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;

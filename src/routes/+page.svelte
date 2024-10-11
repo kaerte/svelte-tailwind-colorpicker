@@ -16,17 +16,14 @@
 	let colorPicker: TailwindColorPicker;
 </script>
 
-
-<h1 class="my-12 text-center text-6xl font-black">Limit ed/less  color picker</h1>
+<h1 class="my-12 text-center text-6xl font-black">Limit ed/less color picker</h1>
 
 <div class="prose mx-auto pb-24">
-
-	<p class=" text-center text-gray-500 text-xl">
+	<p class=" text-center text-xl text-gray-500">
 		A simple color picker of tailwind (or tailwind like palette) colors for Svelte.
 	</p>
 
-	<p class="text-center text-gray-500 ">Limit choice of colors for great looking personalization.</p>
-
+	<p class="text-center text-gray-500">Limit choice of colors for great looking personalization.</p>
 
 	<div class="mb-2 flex justify-center gap-4">
 		<TailwindColorPicker
@@ -58,55 +55,74 @@
 		</div>
 	{/if}
 
-
-<h2 class="mb-4 mt-24 text-center text-3xl font-black">Why?</h2>
+	<h2 class="mb-4 mt-24 text-center text-3xl font-black">Why?</h2>
 
 	<p class="text-center text-gray-500">
-		OG Color pickers allow users to choose any color they want. This is great for flexibility but not
-		always what you want when building personalization tools.
+		OG Color pickers allow users to choose any color they want. This is great for flexibility but
+		not always what you want when building personalization tools.
 	</p>
 
 	<p class="text-center text-gray-500">
-		This component was built to allow users to pick from a defined set of colors. This can make the UI more
-		consistent and predictable.
-		Using Tailwind default colors makes this easy and great looking out of the box.
+		This component was built to allow users to pick from a defined set of colors. This can make the
+		UI more consistent and predictable. Using Tailwind default colors makes this easy and great
+		looking out of the box.
 	</p>
 
 	<h2 class="mb-4 mt-24 text-center text-3xl font-black">Features</h2>
 
-	<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+	<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
 		<div class="rounded-lg border p-4 text-center">
-			<div class="font-semibold mb-1">HTML Canvas</div>
-			<div class="text-gray-500 text-sm">For optimal performance</div>
+			<div class="mb-1 font-semibold">HTML Canvas</div>
+			<div class="text-sm text-gray-500">For optimal performance</div>
 		</div>
 		<div class="rounded-lg border p-4 text-center">
-			<div class="font-semibold mb-1">Flexible Color Options</div>
-			<div class="text-gray-500 text-sm">Use Tailwind default colors or your own</div>
+			<div class="mb-1 font-semibold">Flexible Color Options</div>
+			<div class="text-sm text-gray-500">Use Tailwind default colors or your own</div>
 		</div>
 		<div class="rounded-lg border p-4 text-center">
-			<div class="font-semibold mb-1">Lightweight</div>
-			<div class="text-gray-500 text-sm">Small size with no dependencies</div>
+			<div class="mb-1 font-semibold">Lightweight</div>
+			<div class="text-sm text-gray-500">Small size with no dependencies</div>
 		</div>
 	</div>
 
 	<h2 class="my-12 mt-24 text-center text-6xl font-black">Examples</h2>
 
-	<div class="grid grid-cols-1 gap-4">
-		<h4 class="text-center">Rounded corners</h4>
-		<div class="flex justify-center">
-			<TailwindColorPicker roundedCorners={true} cornerRadius={100} swatchMargin={1} />
+	<div class="grid grid-cols-2 gap-4">
+		<div>
+			<h4 class="text-center">Rounded corners</h4>
+			<div class="flex justify-center">
+				<TailwindColorPicker
+					orientation="vertical"
+					roundedCorners={true}
+					cornerRadius={100}
+					swatchMargin={1}
+					includeColors={['emerald', 'red', 'zinc', 'orange']}
+				/>
+			</div>
 		</div>
 
-		<h4 class="text-center">Small margin</h4>
-		<div class="flex justify-center">
-			<TailwindColorPicker swatchMargin={2} />
-        </div>
+		<div>
+			<h4 class="text-center">Small margin</h4>
+			<div class="flex justify-center">
+				<TailwindColorPicker
+					orientation="vertical"
+					swatchMargin={2}
+					includeColors={['emerald', 'red', 'zinc', 'orange']}
+				/>
+			</div>
+		</div>
+		<div>
+			<h4 class="text-center">Limit colors by name</h4>
+			<div class="flex justify-center">
+				<TailwindColorPicker orientation="vertical" includeColors={['emerald', 'red']} />
+			</div>
+		</div>
 
-		<h4 class="text-center">Limit colors by name</h4>
-		<div class="flex justify-center">
-			<TailwindColorPicker includeColors={['emerald', 'gray']} />
+		<div>
+			<h4 class="text-center">Vertical orientation</h4>
+			<div class="flex justify-center">
+				<TailwindColorPicker includeColors={['emerald', 'red', 'zinc', 'orange']} />
+			</div>
 		</div>
 	</div>
-
-
 </div>
