@@ -16,6 +16,18 @@
 	let colorPicker: TailwindColorPicker;
 </script>
 
+<svelte:head>
+	<title>Limit ed/less color picker - Svelte Tailwind Color Picker</title>
+	<meta name="description" content="A simple color picker of tailwind (or tailwind-like palette) colors for Svelte. Limit choice of colors for great looking personalization.">
+	<meta name="keywords" content="Svelte, Tailwind, Color Picker, Web Development, UI Component">
+	<meta property="og:title" content="Limit ed/less color picker - Svelte Tailwind Color Picker">
+	<meta property="og:description" content="A simple color picker of tailwind colors for Svelte. Limit choice of colors for great looking personalization.">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://svelte-tailwind-colorpicker.pages.dev/">
+	<meta name="twitter:title" content="Limit ed/less color picker - Svelte Tailwind Color Picker">
+	<meta name="twitter:description" content="A simple color picker of tailwind colors for Svelte. Limit choice of colors for great looking personalization.">
+</svelte:head>
+
 <div class="mb-4 flex justify-center">
 	<a
 		href="https://github.com/kaerte/svelte-tailwind-colorpicker"
