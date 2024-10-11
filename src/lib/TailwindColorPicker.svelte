@@ -26,20 +26,47 @@
 
   export let includeColors: string[] | undefined = undefined;
   export let excludeColors: string[] | undefined = undefined;
+  export let includeShades: string[] | undefined = undefined;
+  export let excludeShades: string[] | undefined = undefined;
 
-  $: filteredColors = filterColors(tailwindColors, includeColors, excludeColors);
+  $: filteredColors = filterColors(tailwindColors, includeColors, excludeColors, includeShades, excludeShades);
 
   function filterColors(
     allColors: ColorGroup[],
+    includeColors: string[] | undefined,
+    excludeColors: string[] | undefined,
+    includeShades: string[] | undefined,
+    excludeShades: string[] | undefined
+  ): ColorGroup[] {
+    let filtered = allColors;
+
+    if (includeColors && includeColors.length > 0) {
+      filtered = filtered.filter(color => includeColors.includes(color.name));
+    } else if (excludeColors && excludeColors.length > 0) {
+      filtered = filtered.filter(color => !excludeColors.includes(color.name));
+    }
+
+    return filtered.map(color => ({
+      ...color,
+      swatches: filterShades(color.swatches, includeShades, excludeShades)
+    }));
+  }
+
+  function filterShades(
+    swatches: Record<string, { hex: string }>,
     include: string[] | undefined,
     exclude: string[] | undefined
-  ): ColorGroup[] {
+  ): Record<string, { hex: string }> {
     if (include && include.length > 0) {
-      return allColors.filter(color => include.includes(color.name));
+      return Object.fromEntries(
+        Object.entries(swatches).filter(([shade]) => include.includes(shade))
+      );
     } else if (exclude && exclude.length > 0) {
-      return allColors.filter(color => !exclude.includes(color.name));
+      return Object.fromEntries(
+        Object.entries(swatches).filter(([shade]) => !exclude.includes(shade))
+      );
     }
-    return allColors;
+    return swatches;
   }
 
   $: canvasWidth = orientation === 'horizontal' ? calculateCanvasWidth(filteredColors) : calculateCanvasHeight(filteredColors);
@@ -238,6 +265,8 @@
     roundedCorners?: boolean;
     cornerRadius?: number;
     orientation?: 'horizontal' | 'vertical';
+    includeShades?: string[];
+    excludeShades?: string[];
   }): void {
     swatchSize = newSettings.swatchSize ?? swatchSize;
     swatchMargin = newSettings.swatchMargin ?? swatchMargin;
@@ -246,6 +275,11 @@
     roundedCorners = newSettings.roundedCorners ?? roundedCorners;
     cornerRadius = newSettings.cornerRadius ?? cornerRadius;
     orientation = newSettings.orientation ?? orientation;
+    includeShades = newSettings.includeShades ?? includeShades;
+    excludeShades = newSettings.excludeShades ?? excludeShades;
+
+    // Recalculate filteredColors
+    filteredColors = filterColors(tailwindColors, includeColors, excludeColors, includeShades, excludeShades);
 
     canvasWidth = orientation === 'horizontal' ? calculateCanvasWidth(filteredColors) : calculateCanvasHeight(filteredColors);
     canvasHeight = orientation === 'vertical' ? calculateCanvasWidth(filteredColors) : calculateCanvasHeight(filteredColors);

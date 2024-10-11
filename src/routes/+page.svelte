@@ -85,7 +85,7 @@
 		</div>
 	</div>
 
-	<h2 class="my-12 mt-24 text-center text-6xl font-black">Examples</h2>
+	<h2 class="my-12 mt-24 text-center text-3xl font-black">Examples</h2>
 
 	<div class="grid grid-cols-2 gap-4">
 		<div>
@@ -119,9 +119,33 @@
 		</div>
 
 		<div>
+			<h4 class="text-center">Limit colors by shade</h4>
+			<div class="flex justify-center">
+				<TailwindColorPicker
+					orientation="vertical"
+					includeColors={['emerald', 'red', 'zinc', 'orange']}
+					includeShades={['400', '500', '600', '700']}
+				/>
+			</div>
+		</div>
+
+		<div>
 			<h4 class="text-center">Vertical orientation</h4>
 			<div class="flex justify-center">
 				<TailwindColorPicker includeColors={['emerald', 'red', 'zinc', 'orange']} />
+			</div>
+		</div>
+
+		<div>
+			<h4 class="text-center">Sizes</h4>
+			<div class="flex justify-center">
+				<TailwindColorPicker
+					swatchSize={40}
+					swatchMargin={2}
+					orientation="vertical"
+					includeColors={['yellow', 'sky', 'pink', 'fuchsia']}
+					includeShades={['400', '500', '600', '700']}
+				/>
 			</div>
 		</div>
 	</div>
