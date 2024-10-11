@@ -198,5 +198,11 @@
 			hoveredSwatch = null;
 			drawSwatches();
 		}}
+		on:blur={() => {
+			isMouseDown = false;
+			hoveredSwatch = null;
+			drawSwatches();
+		}}
+		tabindex="0"
 	></canvas>
 </div>
