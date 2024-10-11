@@ -20,7 +20,7 @@ A simple, customizable color picker component for Svelte that uses Tailwind CSS 
 ## Installation
 
 ```bash
-npm install svelte-tailwind-color-picker
+npm i svelte-tailwind-colorpicker
 ```
 
 ## Usage
