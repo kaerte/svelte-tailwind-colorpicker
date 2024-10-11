@@ -102,9 +102,11 @@
 			<TailwindColorPicker swatchMargin={2} />
         </div>
 
-        <h4 class="text-center">Small margin</h4>
+		<h4 class="text-center">Limit colors by name</h4>
+		<div class="flex justify-center">
+			<TailwindColorPicker includeColors={['emerald', 'gray']} />
+		</div>
 	</div>
-
 
 
 </div>

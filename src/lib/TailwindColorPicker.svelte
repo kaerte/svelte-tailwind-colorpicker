@@ -23,10 +23,38 @@
 
   const dispatch = createEventDispatcher();
 
-  export const colors: ColorGroup[] = tailwindColors;
+  export let includeColors: string[] | undefined = undefined;
+  export let excludeColors: string[] | undefined = undefined;
 
-  let canvasWidth = calculateCanvasWidth();
-  let canvasHeight = calculateCanvasHeight();
+  $: filteredColors = filterColors(tailwindColors, includeColors, excludeColors);
+
+  function filterColors(
+    allColors: ColorGroup[],
+    include: string[] | undefined,
+    exclude: string[] | undefined
+  ): ColorGroup[] {
+    if (include && include.length > 0) {
+      return allColors.filter(color => include.includes(color.name));
+    } else if (exclude && exclude.length > 0) {
+      return allColors.filter(color => !exclude.includes(color.name));
+    }
+    return allColors;
+  }
+
+  $: canvasWidth = calculateCanvasWidth(filteredColors);
+  $: canvasHeight = calculateCanvasHeight(filteredColors);
+
+  function calculateCanvasWidth(colors: ColorGroup[]): number {
+    if (!colors || colors.length === 0) return 0;
+    const totalColumns = colors.length;
+    return swatchSize * totalColumns + swatchMargin * (totalColumns + 1);
+  }
+
+  function calculateCanvasHeight(colors: ColorGroup[]): number {
+    if (!colors || colors.length === 0) return 0;
+    const swatchesPerColumn = Object.keys(colors[0].swatches).length;
+    return swatchSize * swatchesPerColumn + swatchMargin * (swatchesPerColumn + 1);
+  }
 
   let swatchPositions: Map<string, Map<string, { x: number; y: number }>> = new Map();
 
@@ -38,24 +66,16 @@
     drawSwatches();
   });
 
-  function calculateCanvasWidth(): number {
-    const totalColumns = colors.length;
-    return swatchSize * totalColumns + swatchMargin * (totalColumns + 1);
-  }
-
-  function calculateCanvasHeight(): number {
-    const swatchesPerColumn = Object.keys(colors[0].swatches).length;
-    return swatchSize * swatchesPerColumn + swatchMargin * (swatchesPerColumn + 1);
-  }
-
   function drawBaseGrid(): void {
+    if (!filteredColors || filteredColors.length === 0) return;
+
     baseGridCanvas.width = canvasWidth;
     baseGridCanvas.height = canvasHeight;
 
     baseGridCtx.clearRect(0, 0, canvasWidth, canvasHeight);
     swatchPositions.clear();
 
-    colors.forEach((color, columnIndex) => {
+    filteredColors.forEach((color, columnIndex) => {
       let x = swatchMargin + columnIndex * (swatchSize + swatchMargin);
       let y = swatchMargin;
 
@@ -158,8 +178,8 @@
     const columnIndex = Math.floor((x - swatchMargin) / (swatchSize + swatchMargin));
     const rowIndex = Math.floor((y - swatchMargin) / (swatchSize + swatchMargin));
 
-    if (columnIndex >= 0 && columnIndex < colors.length) {
-      const color = colors[columnIndex];
+    if (columnIndex >= 0 && columnIndex < filteredColors.length) {
+      const color = filteredColors[columnIndex];
       const shades = Object.keys(color.swatches);
       if (rowIndex >= 0 && rowIndex < shades.length) {
         const shade = shades[rowIndex];
@@ -217,8 +237,8 @@
     roundedCorners = newSettings.roundedCorners ?? roundedCorners;
     cornerRadius = newSettings.cornerRadius ?? cornerRadius;
 
-    canvasWidth = calculateCanvasWidth();
-    canvasHeight = calculateCanvasHeight();
+    canvasWidth = calculateCanvasWidth(filteredColors);
+    canvasHeight = calculateCanvasHeight(filteredColors);
 
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
