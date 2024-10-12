@@ -1,6 +1,7 @@
 <script lang="ts">
 	import TailwindColorPicker from '$lib/TailwindColorPicker.svelte';
-	import type { ActiveSwatch } from '$lib/index.js';
+
+	import type { ActiveSwatch, ColorGroup } from '$lib/types.js';
 
 	let swatchSize = 35;
 	let swatchMargin = 0;
@@ -14,18 +15,44 @@
 		swatch: { hex: '#10b981' }
 	};
 	let colorPicker: TailwindColorPicker;
+	let customPalette: ColorGroup[] = [
+		{
+			name: 'Custom',
+			swatches: {
+				'1': { hex: '#FF0000' }, // Red
+				'2': { hex: '#FF7F00' }, // Orange
+				'3': { hex: '#FFFF00' }, // Yellow
+				'4': { hex: '#7FFF00' }, // Chartreuse Green
+				'5': { hex: '#00FF00' }, // Green
+				'6': { hex: '#00FF7F' }, // Spring Green
+				'7': { hex: '#00FFFF' }, // Cyan
+				'8': { hex: '#007FFF' }, // Azure
+				'9': { hex: '#0000FF' }, // Blue
+				'10': { hex: '#7F00FF' } // Violet
+			}
+		}
+	];
 </script>
 
 <svelte:head>
 	<title>Limit ed/less color picker - Svelte Tailwind Color Picker</title>
-	<meta name="description" content="A simple color picker of tailwind (or tailwind-like palette) colors for Svelte. Limit choice of colors for great looking personalization.">
-	<meta name="keywords" content="Svelte, Tailwind, Color Picker, Web Development, UI Component">
-	<meta property="og:title" content="Limit ed/less color picker - Svelte Tailwind Color Picker">
-	<meta property="og:description" content="A simple color picker of tailwind colors for Svelte. Limit choice of colors for great looking personalization.">
-	<meta property="og:type" content="website">
-	<meta property="og:url" content="https://svelte-tailwind-colorpicker.pages.dev/">
-	<meta name="twitter:title" content="Limit ed/less color picker - Svelte Tailwind Color Picker">
-	<meta name="twitter:description" content="A simple color picker of tailwind colors for Svelte. Limit choice of colors for great looking personalization.">
+	<meta
+		name="description"
+		content="A simple color picker of tailwind (or tailwind-like palette) colors for Svelte. Limit choice of colors for great looking personalization."
+	/>
+	<meta name="keywords" content="Svelte, Tailwind, Color Picker, Web Development, UI Component" />
+	<meta property="og:title" content="Limit ed/less color picker - Svelte Tailwind Color Picker" />
+	<meta
+		property="og:description"
+		content="A simple color picker of tailwind colors for Svelte. Limit choice of colors for great looking personalization."
+	/>
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://svelte-tailwind-colorpicker.pages.dev/" />
+	<meta name="twitter:title" content="Limit ed/less color picker - Svelte Tailwind Color Picker" />
+	<meta
+		name="twitter:description"
+		content="A simple color picker of tailwind colors for Svelte. Limit choice of colors for great looking personalization."
+	/>
 </svelte:head>
 
 <div class="mb-4 flex justify-center">
@@ -182,6 +209,20 @@
 					orientation="vertical"
 					includeColors={['yellow', 'sky', 'pink', 'fuchsia']}
 					includeShades={['400', '500', '600', '700']}
+				/>
+			</div>
+		</div>
+
+		<div>
+			<h4 class="text-center">Custom palette</h4>
+			<div class="flex justify-center">
+				<TailwindColorPicker
+					swatchSize={20}
+					roundedCorners={true}
+					cornerRadius={20}
+					swatchMargin={2}
+					orientation="vertical"
+					palette={customPalette}
 				/>
 			</div>
 		</div>

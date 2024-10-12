@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount, createEventDispatcher } from 'svelte';
+	import type { ActiveSwatch, ColorGroup } from './types.js';
 	import { tailwindColors } from './colors.js';
-	import type { ActiveSwatch, ColorGroup } from './index.js';
 
 	export let swatchSize = 20;
 	export let swatchMargin = 0;
@@ -10,10 +10,16 @@
 	export let roundedCorners = false;
 	export let cornerRadius = 10;
 	export let activeSwatch: ActiveSwatch | null = null;
+	export let palette: ColorGroup[] = tailwindColors;
+
 	let className: string = '';
 	export { className as class };
 
 	export let orientation: 'horizontal' | 'vertical' = 'horizontal';
+	export let includeColors: string[] | undefined = undefined;
+	export let excludeColors: string[] | undefined = undefined;
+	export let includeShades: string[] | undefined = undefined;
+	export let excludeShades: string[] | undefined = undefined;
 
 	let canvas: HTMLCanvasElement;
 	let ctx: CanvasRenderingContext2D;
@@ -24,13 +30,8 @@
 
 	const dispatch = createEventDispatcher();
 
-	export let includeColors: string[] | undefined = undefined;
-	export let excludeColors: string[] | undefined = undefined;
-	export let includeShades: string[] | undefined = undefined;
-	export let excludeShades: string[] | undefined = undefined;
-
 	$: filteredColors = filterColors(
-		tailwindColors,
+		palette,
 		includeColors,
 		excludeColors,
 		includeShades,
@@ -283,7 +284,7 @@
 
 		// Recalculate filteredColors
 		filteredColors = filterColors(
-			tailwindColors,
+			palette,
 			includeColors,
 			excludeColors,
 			includeShades,
@@ -309,7 +310,7 @@
 	}
 </script>
 
-<div class={className}>
+<div class={className} {...$$restProps}>
 	<canvas
 		bind:this={canvas}
 		width={canvasWidth}
