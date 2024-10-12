@@ -38,6 +38,12 @@
 		excludeShades
 	);
 
+	$: {
+		if (activeSwatch) {
+			drawSwatches();
+		}
+	}
+
 	function filterColors(
 		allColors: ColorGroup[],
 		includeColors: string[] | undefined,
@@ -149,6 +155,7 @@
 	}
 
 	function drawSwatches(): void {
+		if (!ctx) return;
 		ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 		ctx.drawImage(baseGridCanvas, 0, 0);
 		drawOverlays();
@@ -271,6 +278,7 @@
 		orientation?: 'horizontal' | 'vertical';
 		includeShades?: string[];
 		excludeShades?: string[];
+		activeSwatch?: ActiveSwatch | null;
 	}): void {
 		swatchSize = newSettings.swatchSize ?? swatchSize;
 		swatchMargin = newSettings.swatchMargin ?? swatchMargin;
@@ -281,6 +289,7 @@
 		orientation = newSettings.orientation ?? orientation;
 		includeShades = newSettings.includeShades ?? includeShades;
 		excludeShades = newSettings.excludeShades ?? excludeShades;
+		activeSwatch = newSettings.activeSwatch ?? activeSwatch;
 
 		// Recalculate filteredColors
 		filteredColors = filterColors(

@@ -101,6 +101,7 @@
 			{cornerRadius}
 			bind:activeSwatch
 			on:updateComplete={() => console.log('Color picker update complete')}
+			on:swatchSelected={(s) => (activeSwatch = s.detail)}
 		/>
 	</div>
 
@@ -161,6 +162,8 @@
 					cornerRadius={100}
 					swatchMargin={1}
 					includeColors={['emerald', 'red', 'zinc', 'orange']}
+					bind:activeSwatch
+					on:swatchSelected={(s) => (activeSwatch = s.detail)}
 				/>
 			</div>
 		</div>
@@ -172,13 +175,20 @@
 					orientation="vertical"
 					swatchMargin={2}
 					includeColors={['emerald', 'red', 'zinc', 'orange']}
+					bind:activeSwatch
+					on:swatchSelected={(s) => (activeSwatch = s.detail)}
 				/>
 			</div>
 		</div>
 		<div>
 			<h4 class="text-center">Limit colors by name</h4>
 			<div class="flex justify-center">
-				<TailwindColorPicker orientation="vertical" includeColors={['emerald', 'red']} />
+				<TailwindColorPicker
+					orientation="vertical"
+					includeColors={['emerald', 'red']}
+					bind:activeSwatch
+					on:swatchSelected={(s) => (activeSwatch = s.detail)}
+				/>
 			</div>
 		</div>
 
@@ -189,6 +199,8 @@
 					orientation="vertical"
 					includeColors={['emerald', 'red', 'zinc', 'orange']}
 					includeShades={['400', '500', '600', '700']}
+					bind:activeSwatch
+					on:swatchSelected={(s) => (activeSwatch = s.detail)}
 				/>
 			</div>
 		</div>
@@ -196,7 +208,11 @@
 		<div>
 			<h4 class="text-center">Vertical orientation</h4>
 			<div class="flex justify-center">
-				<TailwindColorPicker includeColors={['emerald', 'red', 'zinc', 'orange']} />
+				<TailwindColorPicker
+					includeColors={['emerald', 'red', 'zinc', 'orange']}
+					bind:activeSwatch
+					on:swatchSelected={(s) => (activeSwatch = s.detail)}
+				/>
 			</div>
 		</div>
 
@@ -204,11 +220,10 @@
 			<h4 class="text-center">Sizes</h4>
 			<div class="flex justify-center">
 				<TailwindColorPicker
-					swatchSize={40}
-					swatchMargin={2}
-					orientation="vertical"
-					includeColors={['yellow', 'sky', 'pink', 'fuchsia']}
-					includeShades={['400', '500', '600', '700']}
+					swatchSize={8}
+					includeColors={['emerald', 'red', 'zinc', 'orange']}
+					bind:activeSwatch
+					on:swatchSelected={(s) => (activeSwatch = s.detail)}
 				/>
 			</div>
 		</div>
@@ -223,6 +238,8 @@
 					swatchMargin={2}
 					orientation="vertical"
 					palette={customPalette}
+					bind:activeSwatch
+					on:swatchSelected={(s) => (activeSwatch = s.detail)}
 				/>
 			</div>
 		</div>
