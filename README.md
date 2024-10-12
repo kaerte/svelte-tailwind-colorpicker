@@ -58,6 +58,8 @@ import TailwindColorPicker from 'svelte-tailwind-color-picker';
 | orientation     | 'horizontal' \| 'vertical' | 'horizontal' | Orientation of the color picker  |
 | includeColors   | string[]                   | all colors   | Array of color names to include  |
 | includeShades   | string[]                   | all shades   | Array of shade values to include |
+| activeSwatch    | ActiveSwatch \| null       | null         | Currently active swatch (optional) |
+| palette         | ColorGroup[]               | tailwindColors | Custom color palette           |
 
 ## Examples
 
@@ -93,15 +95,37 @@ import TailwindColorPicker from 'svelte-tailwind-color-picker';
 
 	let activeSwatch: ActiveSwatch | null = null;
 
-	function handleColorChange() {
-		if (activeSwatch) {
-			console.log(`Selected color: ${activeSwatch.color}-${activeSwatch.shade}`);
-			console.log(`Hex value: ${activeSwatch.swatch.hex}`);
-		}
+	function handleColorChange(event: CustomEvent<ActiveSwatch>) {
+		const selectedSwatch = event.detail;
+		console.log(`Selected color: ${selectedSwatch.color}-${selectedSwatch.shade}`);
+		console.log(`Hex value: ${selectedSwatch.swatch.hex}`);
 	}
 </script>
 
 <TailwindColorPicker bind:activeSwatch on:change={handleColorChange} />
+```
+
+### Using a Custom Palette
+
+```svelte
+<script>
+	import TailwindColorPicker from 'svelte-tailwind-color-picker';
+	import type { ColorGroup } from 'svelte-tailwind-color-picker';
+
+	const customPalette: ColorGroup[] = [
+		{
+			name: 'customRed',
+			swatches: {
+				'500': { hex: '#ff0000' },
+				'600': { hex: '#cc0000' },
+				'700': { hex: '#990000' },
+			}
+		},
+		// Add more custom color groups as needed
+	];
+</script>
+
+<TailwindColorPicker palette={customPalette} />
 ```
 
 ## Development

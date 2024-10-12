@@ -9,7 +9,11 @@
 	export let borderThickness = 2;
 	export let roundedCorners = false;
 	export let cornerRadius = 10;
-	export let activeSwatch: ActiveSwatch | null = null;
+	export let activeSwatch: ActiveSwatch | null = {
+		color: 'gray',
+		shade: '500',
+		swatch: { hex: '#6b7280' }
+	};
 	export let palette: ColorGroup[] = tailwindColors;
 
 	let className: string = '';
@@ -258,7 +262,7 @@
 		if (clickedSwatch && !swatchesAreEqual(clickedSwatch, activeSwatch)) {
 			activeSwatch = clickedSwatch;
 			drawSwatches();
-			dispatch('swatchSelected', activeSwatch);
+			dispatch('change', activeSwatch);
 		}
 	}
 
