@@ -1,4 +1,4 @@
-import type { ColorGroup } from './index.js';
+import type { ColorGroup } from './types.js';
 
 export const tailwindColors: ColorGroup[] = [
 	{
