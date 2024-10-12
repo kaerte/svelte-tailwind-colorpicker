@@ -251,7 +251,7 @@
 		if (clickedSwatch && !swatchesAreEqual(clickedSwatch, activeSwatch)) {
 			activeSwatch = clickedSwatch;
 			drawSwatches();
-			dispatch('swatchSelected', { swatch: activeSwatch });
+			dispatch('swatchSelected', activeSwatch);
 		}
 	}
 
