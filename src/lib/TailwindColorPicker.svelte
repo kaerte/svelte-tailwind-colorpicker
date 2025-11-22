@@ -62,7 +62,7 @@
 	let ctx: CanvasRenderingContext2D;
 	let baseGridCanvas: HTMLCanvasElement;
 	let baseGridCtx: CanvasRenderingContext2D;
-	let isMouseDown = false;
+	let isPointerDown = false;
 	let isDragging = false;
 
 	const filteredColors = $derived(
@@ -282,7 +282,7 @@
 		return swatch1.color === swatch2.color && swatch1.shade === swatch2.shade;
 	}
 
-	function handleMouseInteraction(event: MouseEvent): void {
+	function handlePointerInteraction(event: PointerEvent): void {
 		const rect = canvas.getBoundingClientRect();
 		const x = event.clientX - rect.left;
 		const y = event.clientY - rect.top;
@@ -295,10 +295,10 @@
 		}
 	}
 
-	function handleMouseUp(event: MouseEvent): void {
-		isMouseDown = false;
+	function handlePointerUp(event: PointerEvent): void {
+		isPointerDown = false;
 		isDragging = false;
-		handleMouseInteraction(event);
+		handlePointerInteraction(event);
 	}
 
 	export function updateAndRedraw(newSettings: {
@@ -339,30 +339,40 @@
 		bind:this={canvas}
 		width={canvasWidth}
 		height={canvasHeight}
-		onmousedown={(e) => {
-			isMouseDown = true;
+		onpointerdown={(e) => {
+			e.preventDefault();
+			isPointerDown = true;
 			isDragging = false;
-			handleMouseInteraction(e);
+			canvas.setPointerCapture(e.pointerId);
+			handlePointerInteraction(e);
 		}}
-		onmousemove={(e) => {
-			if (isMouseDown) {
+		onpointermove={(e) => {
+			if (isPointerDown) {
+				e.preventDefault();
 				isDragging = true;
-				handleMouseInteraction(e);
+				handlePointerInteraction(e);
 			}
 		}}
-		onmouseup={handleMouseUp}
-		onmouseout={(e) => {
-			if (isMouseDown) {
-				handleMouseUp(e);
+		onpointerup={handlePointerUp}
+		onpointerleave={(e) => {
+			if (isPointerDown) {
+				handlePointerUp(e);
+			}
+		}}
+		onpointercancel={(e) => {
+			if (isPointerDown) {
+				handlePointerUp(e);
 			}
 		}}
 		onblur={() => {
-			isMouseDown = false;
+			isPointerDown = false;
 			isDragging = false;
 			drawSwatches();
 		}}
+		oncontextmenu={(e) => e.preventDefault()}
+		style="touch-action: none; -webkit-tap-highlight-color: transparent;"
 		tabindex="0"
 	></canvas>
 </div>
 
-<svelte:window onmouseup={handleMouseUp} />
+<svelte:window onpointerup={handlePointerUp} />
