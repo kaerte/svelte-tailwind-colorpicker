@@ -284,8 +284,10 @@
 
 	function handlePointerInteraction(event: PointerEvent): void {
 		const rect = canvas.getBoundingClientRect();
-		const x = event.clientX - rect.left;
-		const y = event.clientY - rect.top;
+		const scaleX = canvas.width / rect.width;
+		const scaleY = canvas.height / rect.height;
+		const x = (event.clientX - rect.left) * scaleX;
+		const y = (event.clientY - rect.top) * scaleY;
 
 		const clickedSwatch = getClickedSwatch(x, y);
 		if (clickedSwatch && !swatchesAreEqual(clickedSwatch, activeSwatch)) {
@@ -370,7 +372,7 @@
 			drawSwatches();
 		}}
 		oncontextmenu={(e) => e.preventDefault()}
-		style="touch-action: none; -webkit-tap-highlight-color: transparent;"
+		style="touch-action: none; -webkit-tap-highlight-color: transparent; width: 100%; height: auto; display: block;"
 		tabindex="0"
 	></canvas>
 </div>
