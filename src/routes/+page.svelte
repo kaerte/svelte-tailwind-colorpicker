@@ -100,8 +100,8 @@
 			{roundedCorners}
 			{cornerRadius}
 			bind:activeSwatch
-			on:updateComplete={() => console.log('Color picker update complete')}
-			on:swatchSelected={(s) => (activeSwatch = s.detail)}
+			onUpdateComplete={() => console.log('Color picker update complete')}
+			onSwatchSelected={(s) => (activeSwatch = s)}
 		/>
 	</div>
 
@@ -163,7 +163,7 @@
 					swatchMargin={1}
 					includeColors={['emerald', 'red', 'zinc', 'orange']}
 					bind:activeSwatch
-					on:swatchSelected={(s) => (activeSwatch = s.detail)}
+					onSwatchSelected={(s) => (activeSwatch = s)}
 				/>
 			</div>
 		</div>
@@ -176,7 +176,7 @@
 					swatchMargin={2}
 					includeColors={['emerald', 'red', 'zinc', 'orange']}
 					bind:activeSwatch
-					on:swatchSelected={(s) => (activeSwatch = s.detail)}
+					onSwatchSelected={(s) => (activeSwatch = s)}
 				/>
 			</div>
 		</div>
@@ -187,7 +187,7 @@
 					orientation="vertical"
 					includeColors={['emerald', 'red']}
 					bind:activeSwatch
-					on:swatchSelected={(s) => (activeSwatch = s.detail)}
+					onSwatchSelected={(s) => (activeSwatch = s)}
 				/>
 			</div>
 		</div>
@@ -200,7 +200,7 @@
 					includeColors={['emerald', 'red', 'zinc', 'orange']}
 					includeShades={['400', '500', '600', '700']}
 					bind:activeSwatch
-					on:swatchSelected={(s) => (activeSwatch = s.detail)}
+					onSwatchSelected={(s) => (activeSwatch = s)}
 				/>
 			</div>
 		</div>
@@ -211,7 +211,7 @@
 				<TailwindColorPicker
 					includeColors={['emerald', 'red', 'zinc', 'orange']}
 					bind:activeSwatch
-					on:swatchSelected={(s) => (activeSwatch = s.detail)}
+					onSwatchSelected={(s) => (activeSwatch = s)}
 				/>
 			</div>
 		</div>
@@ -223,7 +223,7 @@
 					swatchSize={8}
 					includeColors={['emerald', 'red', 'zinc', 'orange']}
 					bind:activeSwatch
-					on:swatchSelected={(s) => (activeSwatch = s.detail)}
+					onSwatchSelected={(s) => (activeSwatch = s)}
 				/>
 			</div>
 		</div>
@@ -239,7 +239,7 @@
 					orientation="vertical"
 					palette={customPalette}
 					bind:activeSwatch
-					on:swatchSelected={(s) => (activeSwatch = s.detail)}
+					onSwatchSelected={(s) => (activeSwatch = s)}
 				/>
 			</div>
 		</div>

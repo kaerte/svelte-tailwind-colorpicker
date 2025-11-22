@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount, createEventDispatcher } from 'svelte';
+	import { onMount } from 'svelte';
 	import type { ActiveSwatch, ColorGroup } from './types.js';
 	import { tailwindColors } from './colors.js';
 
@@ -18,6 +18,8 @@
 		includeShades?: string[];
 		excludeShades?: string[];
 		class?: string;
+		onSwatchSelected?: (swatch: ActiveSwatch) => void;
+		onUpdateComplete?: () => void;
 	};
 	let {
 		swatchSize: swatchSizeProp = 20,
@@ -26,18 +28,20 @@
 		borderThickness: borderThicknessProp = 2,
 		roundedCorners: roundedCornersProp = false,
 		cornerRadius: cornerRadiusProp = 10,
-		activeSwatch: activeSwatchProp = {
+		activeSwatch = $bindable({
 			color: 'gray',
 			shade: '500',
 			swatch: { hex: '#6b7280' }
-		} as ActiveSwatch | null,
+		} as ActiveSwatch | null),
 		palette = tailwindColors,
 		orientation: orientationProp = 'horizontal',
 		includeColors,
 		excludeColors,
 		includeShades: includeShadesProp,
-		excludeShades: excludeShadesProp
-	} = ($props() as Props);
+		excludeShades: excludeShadesProp,
+		onSwatchSelected,
+		onUpdateComplete
+	}: Props = $props();
 
 	// Component state (mutable)
 	let swatchSize = $state(swatchSizeProp);
@@ -49,7 +53,7 @@
 	let orientation: 'horizontal' | 'vertical' = $state(orientationProp);
 	let includeShades: string[] | undefined = $state(includeShadesProp);
 	let excludeShades: string[] | undefined = $state(excludeShadesProp);
-	let activeSwatch: ActiveSwatch | null = $state(activeSwatchProp);
+	// activeSwatch is bindable prop; use directly
 
 	// Read-only props (not mutated)
 	// palette, includeColors, excludeColors are already defined above
@@ -60,8 +64,6 @@
 	let baseGridCtx: CanvasRenderingContext2D;
 	let isMouseDown = false;
 	let isDragging = false;
-
-	const dispatch = createEventDispatcher();
 
 	const filteredColors = $derived(
 		filterColors(palette, includeColors, excludeColors, includeShades, excludeShades)
@@ -289,7 +291,7 @@
 		if (clickedSwatch && !swatchesAreEqual(clickedSwatch, activeSwatch)) {
 			activeSwatch = clickedSwatch;
 			drawSwatches();
-			dispatch('change', activeSwatch);
+			onSwatchSelected?.(activeSwatch);
 		}
 	}
 
@@ -328,7 +330,7 @@
 		drawBaseGrid();
 		drawSwatches();
 
-		dispatch('updateComplete');
+		onUpdateComplete?.();
 	}
 </script>
 
