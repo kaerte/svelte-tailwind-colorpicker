@@ -3,27 +3,56 @@
 	import type { ActiveSwatch, ColorGroup } from './types.js';
 	import { tailwindColors } from './colors.js';
 
-	export let swatchSize = 20;
-	export let swatchMargin = 0;
-	export let borderColor = '#000000';
-	export let borderThickness = 2;
-	export let roundedCorners = false;
-	export let cornerRadius = 10;
-	export let activeSwatch: ActiveSwatch | null = {
-		color: 'gray',
-		shade: '500',
-		swatch: { hex: '#6b7280' }
+	type Props = {
+		swatchSize?: number;
+		swatchMargin?: number;
+		borderColor?: string;
+		borderThickness?: number;
+		roundedCorners?: boolean;
+		cornerRadius?: number;
+		activeSwatch?: ActiveSwatch | null;
+		palette?: ColorGroup[];
+		orientation?: 'horizontal' | 'vertical';
+		includeColors?: string[];
+		excludeColors?: string[];
+		includeShades?: string[];
+		excludeShades?: string[];
+		class?: string;
 	};
-	export let palette: ColorGroup[] = tailwindColors;
+	let {
+		swatchSize: swatchSizeProp = 20,
+		swatchMargin: swatchMarginProp = 0,
+		borderColor: borderColorProp = '#000000',
+		borderThickness: borderThicknessProp = 2,
+		roundedCorners: roundedCornersProp = false,
+		cornerRadius: cornerRadiusProp = 10,
+		activeSwatch: activeSwatchProp = {
+			color: 'gray',
+			shade: '500',
+			swatch: { hex: '#6b7280' }
+		} as ActiveSwatch | null,
+		palette = tailwindColors,
+		orientation: orientationProp = 'horizontal',
+		includeColors,
+		excludeColors,
+		includeShades: includeShadesProp,
+		excludeShades: excludeShadesProp
+	} = ($props() as Props);
 
-	let className: string = '';
-	export { className as class };
+	// Component state (mutable)
+	let swatchSize = $state(swatchSizeProp);
+	let swatchMargin = $state(swatchMarginProp);
+	let borderColor = $state(borderColorProp);
+	let borderThickness = $state(borderThicknessProp);
+	let roundedCorners = $state(roundedCornersProp);
+	let cornerRadius = $state(cornerRadiusProp);
+	let orientation: 'horizontal' | 'vertical' = $state(orientationProp);
+	let includeShades: string[] | undefined = $state(includeShadesProp);
+	let excludeShades: string[] | undefined = $state(excludeShadesProp);
+	let activeSwatch: ActiveSwatch | null = $state(activeSwatchProp);
 
-	export let orientation: 'horizontal' | 'vertical' = 'horizontal';
-	export let includeColors: string[] | undefined = undefined;
-	export let excludeColors: string[] | undefined = undefined;
-	export let includeShades: string[] | undefined = undefined;
-	export let excludeShades: string[] | undefined = undefined;
+	// Read-only props (not mutated)
+	// palette, includeColors, excludeColors are already defined above
 
 	let canvas: HTMLCanvasElement;
 	let ctx: CanvasRenderingContext2D;
@@ -34,19 +63,15 @@
 
 	const dispatch = createEventDispatcher();
 
-	$: filteredColors = filterColors(
-		palette,
-		includeColors,
-		excludeColors,
-		includeShades,
-		excludeShades
+	const filteredColors = $derived(
+		filterColors(palette, includeColors, excludeColors, includeShades, excludeShades)
 	);
 
-	$: {
+	$effect(() => {
 		if (activeSwatch) {
 			drawSwatches();
 		}
-	}
+	});
 
 	function filterColors(
 		allColors: ColorGroup[],
@@ -86,14 +111,16 @@
 		return swatches;
 	}
 
-	$: canvasWidth =
+	const canvasWidth = $derived(
 		orientation === 'horizontal'
 			? calculateCanvasWidth(filteredColors)
-			: calculateCanvasHeight(filteredColors);
-	$: canvasHeight =
+			: calculateCanvasHeight(filteredColors)
+	);
+	const canvasHeight = $derived(
 		orientation === 'vertical'
 			? calculateCanvasWidth(filteredColors)
-			: calculateCanvasHeight(filteredColors);
+			: calculateCanvasHeight(filteredColors)
+	);
 
 	function calculateCanvasWidth(colors: ColorGroup[]): number {
 		if (!colors || colors.length === 0) return 0;
@@ -295,24 +322,6 @@
 		excludeShades = newSettings.excludeShades ?? excludeShades;
 		activeSwatch = newSettings.activeSwatch ?? activeSwatch;
 
-		// Recalculate filteredColors
-		filteredColors = filterColors(
-			palette,
-			includeColors,
-			excludeColors,
-			includeShades,
-			excludeShades
-		);
-
-		canvasWidth =
-			orientation === 'horizontal'
-				? calculateCanvasWidth(filteredColors)
-				: calculateCanvasHeight(filteredColors);
-		canvasHeight =
-			orientation === 'vertical'
-				? calculateCanvasWidth(filteredColors)
-				: calculateCanvasHeight(filteredColors);
-
 		canvas.width = canvasWidth;
 		canvas.height = canvasHeight;
 
@@ -323,29 +332,29 @@
 	}
 </script>
 
-<div class={className} {...$$restProps}>
+<div>
 	<canvas
 		bind:this={canvas}
 		width={canvasWidth}
 		height={canvasHeight}
-		on:mousedown={(e) => {
+		onmousedown={(e) => {
 			isMouseDown = true;
 			isDragging = false;
 			handleMouseInteraction(e);
 		}}
-		on:mousemove={(e) => {
+		onmousemove={(e) => {
 			if (isMouseDown) {
 				isDragging = true;
 				handleMouseInteraction(e);
 			}
 		}}
-		on:mouseup={handleMouseUp}
-		on:mouseout={(e) => {
+		onmouseup={handleMouseUp}
+		onmouseout={(e) => {
 			if (isMouseDown) {
 				handleMouseUp(e);
 			}
 		}}
-		on:blur={() => {
+		onblur={() => {
 			isMouseDown = false;
 			isDragging = false;
 			drawSwatches();
@@ -354,4 +363,4 @@
 	></canvas>
 </div>
 
-<svelte:window on:mouseup={handleMouseUp} />
+<svelte:window onmouseup={handleMouseUp} />
