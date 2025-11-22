@@ -152,7 +152,7 @@
 
 	<h2 class="my-12 mt-24 text-center text-3xl font-black">Examples</h2>
 
-	<div class="grid grid-cols-2 gap-4">
+	<div class="grid sm:grid-cols-2 gap-4">
 		<div>
 			<h4 class="text-center">Rounded corners</h4>
 			<div class="flex justify-center">
